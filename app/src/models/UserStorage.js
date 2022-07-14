@@ -1,75 +1,30 @@
 "use strict"
 
-const fs = require('fs').promises;
-const DBFILE = "./src/databases/logindb/users.json";
+const db = require('../config/db');
 
 class UserStorage {
 
-    static #getUsers(data, isAll, fields) {
-
-        const users = JSON.parse(data);
-        if (isAll) return users;
-
-        const retUser = fields.reduce((retUser, field) => {
-            
-            if (users.hasOwnProperty(field)) {
-                retUser[field] = users[field];
-            }
-            return retUser;
-
-        }, {});
-
-        return retUser;
-
-    };
-
-    static #getUserInfo(data, id) {
-
-        const users = JSON.parse(data);
-
-        const idx = users.id.indexOf(id);
-        const usersKeys = Object.keys(users); // users 의 키값 배열 => [id, psword, name]
-        const userInfo = usersKeys.reduce((newInfo, info) => {
-            newInfo[info] = users[info][idx];
-            return newInfo;
-        }, {});
-
-        return userInfo;
-
-    };
-
-   static getUsers(isAll, ...fields) {
-
-        return fs.readFile(DBFILE) // is Promise
-            .then((data) => {
-                return this.#getUsers(data, isAll, fields);
-            })
-            .catch(console.error);
-
-    };
-
     static getUserInfo(id) {
 
-        return fs.readFile(DBFILE) // is Promise
-            .then((data) => {
-                return this.#getUserInfo(data, id);
-            })
-            .catch(console.error);
+        return new Promise((resolve, reject) => {
 
+            const query = "SELECT * FROM users WHERE id = ?;";
+            db.get(query, [id], (err, result) => {
+                if (err) reject(`${err}`);
+                else resolve(result);
+            });
+        });
     };
 
     static async addUserInfo(userInfo) {
 
-        const users = await this.getUsers(true);
-        if (users.id.includes(userInfo.id)) {
-            throw "이미 존재하는 아이디입니다.";
-        }
-
-        users.id.push(userInfo.id);
-        users.name.push(userInfo.name);
-        users.psword.push(userInfo.psword);
-        fs.writeFile(DBFILE, JSON.stringify(users));
-        return { success: true };
+        return new Promise((resolve, reject) => {
+            const query = "INSERT INTO users (id, name, psword) VALUES (?, ?, ?);";
+            db.run(query, [userInfo.id, userInfo.name, userInfo.psword], (err) => {
+                if (err) reject(`${err}`);
+                else resolve({ success: true });
+            });
+        });
     };
 };
 

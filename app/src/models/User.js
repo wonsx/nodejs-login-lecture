@@ -11,22 +11,27 @@ class User {
     async login() {
 
         const client = this.body;
-        const { id, psword } = await UserStorage.getUserInfo(client.id);
+        try {
+            const user = await UserStorage.getUserInfo(client.id);
 
-        const response = {};
-        if (id) {
-            if ((id === client.id) && (psword === client.psword)) {
-                response.success = true;
+            const response = {};
+            if (user) {
+                if ((user.id === client.id) && (user.psword === client.psword)) {
+                    response.success = true;
+                } else {
+                    response.success = false;
+                    response.msg = "암호를 확인하시기 바랍니다."
+                }
             } else {
                 response.success = false;
-                response.msg = "암호를 확인하시기 바랍니다."
+                response.msg = "아이디를 확인하시기 바랍니다.";
             }
-        } else {
-            response.success = false;
-            response.msg = "아이디를 확인하시기 바랍니다.";
-        }
 
-        return response;
+            return response;
+
+        } catch (err) {
+            return { success: false, msg: err };
+        }
 
     };
 

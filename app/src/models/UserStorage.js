@@ -20,7 +20,19 @@ class UserStorage {
         }, {});
 
         return retUser;
-    }
+    };
+
+    static getUserInfo(id) {
+        const users = this.#users;
+        const idx = users.id.indexOf(id);
+        const usersKeys = Object.keys(users); // users 의 키값 배열 => [id, psword, name]
+        const userInfo = usersKeys.reduce((newInfo, info) => {
+            newInfo[info] = users[info][idx];
+            return newInfo;
+        }, {});
+
+        return userInfo;
+    };
 };
 
 module.exports = UserStorage;

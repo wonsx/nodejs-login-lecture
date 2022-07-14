@@ -1,9 +1,6 @@
 "use strict"
 
-const users = {
-    id: ["aaa", "bbb", "ccc"],
-    psword: ["aaa", "bbb", "ccc"],
-};
+const UserStorage = require('../../models/UserStorage');
 
 const output = {
     home: (req, res) => {
@@ -18,7 +15,10 @@ const process = {
     login: (req, res) => {
         const id = req.body.id,
             psword = req.body.psword;
-        // console.log("process.login", id, psword);
+
+        const users = UserStorage.getUsers("id", "psword");
+
+        const response = {};
 
         if (users.id.includes(id)) {
 
@@ -26,17 +26,21 @@ const process = {
 
             if (users.psword[idx] === psword) {
 
-                return res.json({
-                    success: true,
-                });
+                response.success = true;
+                return res.json(response);
 
             } else {
-                
-                return res.json({
-                    success: false,
-                    msg: "로그인에 실패하셨습니다.",
-                });
+
+                response.success = false;
+                response.msg = "암호를 확인하시기 바랍니다.";
+                return res.json(response);
             }
+        } else {
+
+            response.success = false;
+            response.msg = "아이디를 확인하시기 바랍니다.";
+            return res.json(response);
+
         }
     },
 };

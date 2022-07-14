@@ -1,14 +1,27 @@
+<!-- Copyright (c) 2022 by Aigars Silkalns (https://codepen.io/colorlib/pen/rxddKy) -->
+
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/home/login.css">
     <script src="/js/home/login.js" defer></script>
     <title>Document</title>
 </head>
+
 <body>
-    <input id="userid" type="text" placeholder="user id"><br>
-    <input id="userpw" type="text" placeholder="password"><br>
-    <button id="btn-login">LogIn</button>
+    <div class="login-page">
+        <div class="form">
+            <form class="login-form">
+                <input id="userid" type="text" placeholder="user id" />
+                <input id="userpw" type="text" placeholder="password" />
+                <button id="btn-login" type="button">LogIn</button>
+                <p class="message">Not registered? <a href="/register">Create an account</a></p>
+            </form>
+        </div>
+    </div>
 </body>
+
 </html>

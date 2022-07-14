@@ -1,17 +1,38 @@
 "use strict"
 
-const id_ = document.querySelector("#userid"),
-    psword_ = document.querySelector("#userpw"),
-    btnLogin_ = document.querySelector("#btn-login");
+const id = document.querySelector('#userid'),
+    psword = document.querySelector('#userpw'),
+    btnLogin = document.querySelector('#btn-login');
 
-btnLogin_.addEventListener('click', login);
+btnLogin.addEventListener('click', login);
 
 function login() {
     const req = {
-        id: id_.value,
-        psword: psword_.value,
+        id: id.value,
+        psword: psword.value,
     };
 
     // to server
+    fetch("/login", {
+        
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(req),
 
+    })
+        .then((res) => res.json()) // res.json() is Promise
+        .then((res) => {
+
+            if (res.success) {
+                location.href = "/";
+            } else {
+                alert(res.msg);
+            }
+
+        })
+        .catch((err) => {
+            console.error("로그인 중 에러 발생");
+        });
 };

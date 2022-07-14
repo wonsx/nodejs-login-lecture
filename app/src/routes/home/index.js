@@ -5,8 +5,10 @@ const router = express.Router();
 
 // controller
 const ctrl = require('./home.ctrl');
-// routing
-router.get('/', ctrl.home);
-router.get('/login', ctrl.login);
+// routing GET api
+router.get('/', ctrl.output.home);
+router.get('/login', ctrl.output.login);
+// routing POST api
+router.post('/login', ctrl.process.login);
 
 module.exports = router;

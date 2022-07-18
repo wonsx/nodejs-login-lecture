@@ -73,7 +73,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 // + morgan + winston settings
 logger.stream = {
-    write: (message) => logger.info(message),
+    write: (message) => logger.http(message),
 }
 
 

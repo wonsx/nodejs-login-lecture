@@ -30,7 +30,7 @@ class User {
             return response;
 
         } catch (err) {
-            return { success: false, msg: err };
+            return { success: false, err };
         }
 
     };
@@ -42,7 +42,7 @@ class User {
             const response = await UserStorage.addUserInfo(client);
             return response;
         } catch (err) {
-            return { success: false, msg: err };
+            return { success: false, err };
         }
     };
 };
